@@ -1,60 +1,296 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qanita Syafika - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
 </head>
 <body>
     <header class="site-header">
-        <div class="container">
+        <div class="container header-container">
             <a href="#profile" class="brand">Qanita Syafika</a>
-            <nav>
-                <a href="#profile">Profile</a>
+            <nav class="nav-links">
+                <a href="#profile" class="nav-item">Profile</a>
+                <a href="#education" class="nav-item">Education</a>
+                <a href="#skills" class="nav-item">Skills</a>
+                <a href="#awards" class="nav-item">Awards</a>
+                <a href="#experience" class="nav-item">Experience</a>
+                <a href="#projects" class="nav-item">Projects</a>
             </nav>
-        </div>
+        </div>              
     </header>
 
     <main>
-        <section class="hero" id="profile">
+        <!-- 1. PROFILE SECTION -->
+        <section class="section" id="profile">
             <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Sistem Informasi &middot; Universitas Indonesia</p>
+                <div class="hero-text">
+                    <span class="badge">Sistem Informasi &middot; Universitas Indonesia</span>
                     <h1>Qanita Syafika</h1>
-                </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/qanita.png" alt="Photo of Qanita Syafika">
-                </div>
-                <div class="hero-details">
-                    <p class="bio">A student at Information Systems, Faculty of Computer Science at University of Indonesia. Passionate about leadership, public speaking, and organizational activities with proven experience in managing teams and coordinating events. Strong interest in people development, business, and technology, with the ability to connect interpersonal skills and analytical thinking to achieve impactful results.</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>25065541996</dd>
+                    <p class="bio">Information Systems student at Universitas Indonesia passionate about leadership, public speaking, and event management. Experienced in leading teams and executing impactful business and technology initiatives.</p>
+                    
+                    <div class="meta-info">
+                        <div>
+                            <span class="meta-label">NPM</span>
+                            <span class="meta-val">2506551996</span>
                         </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
+                        <div>
+                            <span class="meta-label">Program</span>
+                            <span class="meta-val">S1 Sistem Informasi</span>
                         </div>
-                    </dl>
-                    <div class="social-links">
-                        <a href="https://github.com/qanitasyafika" class="social-link" target="_blank">GitHub</a>
-                        <a href="https://www.linkedin.com/in/qanita-syafika" class="social-link" target="_blank">LinkedIn</a>
-                        <a href="mailto:qanita.syafika@ui.ac.id" class="social-link">Email</a>
+                    </div>
+
+                    <div class="social-btn-group">
+                        <a href="https://github.com/qanitasyafika" class="btn btn-navy-outline" target="_blank">GitHub</a>
+                        <a href="https://www.linkedin.com/in/qanita-syafika" class="btn btn-navy-outline" target="_blank">LinkedIn</a>
+                        <a href="mailto:qanitasyafika234@gmail.com" class="btn btn-navy-outline">Email</a>
+                    </div>
+                </div>
+
+                <div class="hero-image-wrapper">
+                    <img src="{% static 'img/qanita.png' %}" alt="Qanita Syafika" class="profile-img">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. EDUCATION SECTION -->
+        <section class="section" id="education">
+            <div class="container">
+                <div class="section-title">
+                    <span class="sub-heading">Academic Journey</span>
+                    <h2>Education</h2>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-card">
+                        <span class="timeline-date">2025 - Present</span>
+                        <h3>Universitas Indonesia</h3>
+                        <p>Bachelor of Information Systems, Fakultas Ilmu Komputer</p>
+                    </div>
+                    <div class="timeline-card">
+                        <span class="timeline-date">2022 - 2025</span>
+                        <h3>MAN Insan Cendekia Ogan Komering Ilir (OKI)</h3>
+                        <p>SMA / Madrasah Aliyah</p>
+                    </div>
+                    <div class="timeline-card">
+                        <span class="timeline-date">2019 - 2022</span>
+                        <h3>MTsN 2 Kota Palembang</h3>
+                        <p>SMP / Madrasah Tsanawiyah</p>
+                    </div>
+                    <div class="timeline-card">
+                        <span class="timeline-date">2013 - 2019</span>
+                        <h3>SDIT Fatimah Palembang</h3>
+                        <p>Sekolah Dasar</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SKILLS SECTION -->
+        <section class="section" id="skills">
+            <div class="container">
+                <div class="section-title">
+                    <span class="sub-heading">Capabilities & Technical Expertise</span>
+                    <h2>Skills</h2>
+                </div>
+                <div class="grid-3">
+                    <div class="card">
+                        <span class="card-tag">Leadership & Strategy</span>
+                        <h3>Event Planning & Leadership</h3>
+                        <p>Project Leadership, Event Planning & Coordination, Program Development & Innovation, Organization Management.</p>
+                    </div>
+                    <div class="card">
+                        <span class="card-tag">Public Relations</span>
+                        <h3>Communication & PR</h3>
+                        <p>Public Speaking, Master of Ceremonies (MC), Sponsorship, Public Relations, Documentation.</p>
+                    </div>
+                    <div class="card">
+                        <span class="card-tag">Technical Skills</span>
+                        <h3>Programming & Tools</h3>
+                        <p>Java, Python, HTML & CSS, Microsoft Office (Word, Excel, PowerPoint), Canva, ibisPaint X.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. AWARDS SECTION -->
+        <section class="section" id="awards">
+            <div class="container">
+                <div class="section-title">
+                    <span class="sub-heading">Honors & Achievements</span>
+                    <h2>Awards</h2>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <span class="award-badge">International Award</span>
+                        <h3>Silver Medal</h3>
+                        <p class="award-source">Japan Design Invention and Exhibition Expo - Tokyo, Japan (July 2024)</p>
+                        <p class="card-desc">Research Field: Information and Communications Technology, Multimedia.</p>
+                    </div>
+                    <div class="card">
+                        <span class="award-badge">Regional</span>
+                        <h3>1st Place Winner</h3>
+                        <p class="award-source">Speech Competition by Dinas Perpustakaan dan Kearsipan OKI (2023)</p>
+                    </div>
+                    <div class="card">
+                        <span class="award-badge">National</span>
+                        <h3>Top 10 Finalist</h3>
+                        <p class="award-source">National Mathematics Olympiad by Jenius Education (2022)</p>
+                    </div>
+                    <div class="card">
+                        <span class="award-badge">National</span>
+                        <h3>National Finalist</h3>
+                        <p class="award-source">Kihajar Competition (2018)</p>
+                        <p class="card-desc">Selected as sole representative from South Sumatra in the national round.</p>
+                    </div>
+                    <div class="card">
+                        <span class="award-badge">Academic</span>
+                        <h3>Highest Score Award</h3>
+                        <p class="award-source">English Subject at MAN Insan Cendekia OKI</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. EXPERIENCE SECTION -->
+        <section class="section" id="experience">
+            <div class="container">
+                <div class="section-title">
+                    <span class="sub-heading">Leadership & Organizational Roles</span>
+                    <h2>Experience</h2>
+                </div>
+                <div class="experience-stack">
+                    <div class="card exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3>BEM Fasilkom UI</h3>
+                                <p class="exp-role">Staff of Student Advocacy & Welfare (Adkesma)</p>
+                            </div>
+                            <span class="time-badge">2026 - 2027</span>
+                        </div>
+                        <ul class="exp-list">
+                            <li>Managed the "Curhat Sama Panda" initiative, coordinating student counselors to support peer mental health.</li>
+                        </ul>
+                    </div>
+
+                    <div class="experience-stack">
+                    <div class="card exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3>Staff COMPFEST 18</h3>
+                                <p class="exp-role">Staff of Direct Marketing</p>
+                            </div>
+                            <span class="time-badge">2026</span>
+                        </div>
+                        <ul class="exp-list">
+                            <li>Executed promotional strategies and direct marketing campaigns to increase event engagement.</li>
+                            <li>Served as Master of Ceremonies (MC) for various faculty events.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3>Rapat Kerja Daerah OKI (Rakerda)</h3>
+                                <p class="exp-role">Deputy Project Leader</p>
+                            </div>
+                            <span class="time-badge">Oct 2024</span>
+                        </div>
+                        <ul class="exp-list">
+                            <li>Led cross-departmental coordination to ensure successful implementation of the Regional Working Meeting.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3>Forum OSIS Ogan Komering Ilir</h3>
+                                <p class="exp-role">Deputy Secretary of Regional Secretariat</p>
+                            </div>
+                            <span class="time-badge">2024 - 2025</span>
+                        </div>
+                        <ul class="exp-list">
+                            <li>Drafted, managed, and archived official correspondence for events and participants.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3>Forum OSIS Sumatera Selatan</h3>
+                                <p class="exp-role">Public Relations Division</p>
+                            </div>
+                            <span class="time-badge">2023 - 2024</span>
+                        </div>
+                        <ul class="exp-list">
+                            <li>Secured sponsorships by drafting and distributing official proposals to partner companies.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card exp-card">
+                        <div class="exp-header">
+                            <div>
+                                <h3>OSIS Insan Cendekia OKI</h3>
+                                <p class="exp-role">Public Relations Division</p>
+                            </div>
+                            <span class="time-badge">2022 - 2024</span>
+                        </div>
+                        <ul class="exp-list">
+                            <li>Served as Master of Ceremonies (MC) at multiple major school events.</li>
+                            <li>Coordinated sponsorship activities and generated new program proposals.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PROJECTS SECTION -->
+        <section class="section" id="projects">
+            <div class="container">
+                <div class="section-title">
+                    <span class="sub-heading">Showcase & Portfolio Works</span>
+                    <h2>Projects</h2>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <span class="card-tag">Research Project</span>
+                        <h3>Natural Ink from Rengat Leaves</h3>
+                        <p class="project-year">2024 &middot; MAN Insan Cendekia OKI</p>
+                        <p class="card-desc">An experimental study to produce eco-friendly ink from Rengat leaves and analyze pigment composition for color density comparison.</p>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-tag">Entrepreneurship</span>
+                        <h3>Pacil (Pangsit Chili Oil)</h3>
+                        <p class="project-year">Small Business Venture</p>
+                        <p class="card-desc">Developed and managed a small food business, handling product innovation, financial management, and direct sales strategy.</p>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-tag">Creative Arts</span>
+                        <h3>P5 Final Theater Project</h3>
+                        <p class="project-year">Performing Arts</p>
+                        <p class="card-desc">Performed as the main female character in the final theater performance, ensuring overall project success through teamwork and coordination.</p>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-tag">Organization Event</span>
+                        <h3>Rapat Kerja Daerah OKI</h3>
+                        <p class="project-year">Regional Initiative</p>
+                        <p class="card-desc">Served as Vice Chairperson and key initiator of the first regional work meeting in OKI, supporting planning and execution.</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="site-footer">
+    <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Qanita Syafika. Fakultas Ilmu Komputer, Universitas Indonesia</p>
+            <p>&copy; 2026 Qanita Syafika &middot; Fakultas Ilmu Komputer, Universitas Indonesia</p>
         </div>
     </footer>
 </body>
