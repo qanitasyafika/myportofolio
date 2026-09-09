@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qanita Syafika - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>{{ name }} Portofolio</title>    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
@@ -13,14 +12,10 @@
 <body>
     <header class="site-header">
         <div class="container header-container">
-            <a href="#profile" class="brand">Qanita Syafika</a>
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
             <nav class="nav-links">
-                <a href="#profile" class="nav-item">Profile</a>
-                <a href="#education" class="nav-item">Education</a>
-                <a href="#skills" class="nav-item">Skills</a>
-                <a href="#awards" class="nav-item">Awards</a>
-                <a href="#experience" class="nav-item">Experience</a>
-                <a href="#projects" class="nav-item">Projects</a>
+                <a href="{% url 'main:show_main' %}" class="nav-item">Profile</a>
+                <a href="{% url 'main:show_experience' %}" class="nav-item">Experience</a>
             </nav>
         </div>              
     </header>
@@ -31,18 +26,15 @@
             <div class="container hero-grid">
                 <div class="hero-text">
                     <span class="badge">Sistem Informasi &middot; Universitas Indonesia</span>
-                    <h1>Qanita Syafika</h1>
-                    <p class="bio">Information Systems student at Universitas Indonesia passionate about leadership, public speaking, and event management. Experienced in leading teams and executing impactful business and technology initiatives.</p>
-                    
+                    <h1>{{ name }}</h1>                    <p class="bio">{{ bio }}</p>
                     <div class="meta-info">
                         <div>
                             <span class="meta-label">NPM</span>
-                            <span class="meta-val">2506551996</span>
+                            <span class="meta-val">{{ npm }}</span>
                         </div>
                         <div>
                             <span class="meta-label">Program</span>
-                            <span class="meta-val">S1 Sistem Informasi</span>
-                        </div>
+                            <span class="meta-val">{{ study_program }}</span>                        </div>
                     </div>
 
                     <div class="social-btn-group">
@@ -53,8 +45,7 @@
                 </div>
 
                 <div class="hero-image-wrapper">
-                    <img src="{% static 'img/qanita.png' %}" alt="Qanita Syafika" class="profile-img">
-                </div>
+                    <img src="{% static 'img/qanita.png' %}" alt="Photo of {{ name }}" class="profile-img">                </div>
             </div>
         </section>
 
@@ -290,8 +281,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Qanita Syafika &middot; Fakultas Ilmu Komputer, Universitas Indonesia</p>
-        </div>
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>        </div>
     </footer>
 </body>
 </html>
