@@ -41,7 +41,7 @@ main {
     padding: 0 1.5rem;
 }
 
-/* HEADER & NAVBAR */
+/* Header & Navbar */
 .site-header {
     position: sticky;
     top: 0;
@@ -85,7 +85,7 @@ main {
     background-color: var(--navy-primary);
 }
 
-/* PROFILE HERO SECTION */
+/* Hero Section */
 .section {
     padding: 5rem 0;
 }
@@ -180,7 +180,7 @@ main {
     object-fit: cover;
 }
 
-/* EXPERIENCE & PROJECTS GRID SECTION */
+/* Grid & Cards Section */
 .experience-section {
     padding: 4.5rem 0;
 }
@@ -203,8 +203,9 @@ main {
 
 .experience-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.75rem;
+    width: 100%;
 }
 
 .experience-card {
@@ -279,7 +280,7 @@ main {
     border: 1px dashed var(--border-maroon);
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
     padding: 2.25rem 0;
     text-align: center;
@@ -290,7 +291,7 @@ main {
     margin-top: auto;
 }
 
-/* RESPONSIVE DESIGN */
+/* Responsive */
 @media (max-width: 768px) {
     .hero-grid {
         grid-template-columns: 1fr;

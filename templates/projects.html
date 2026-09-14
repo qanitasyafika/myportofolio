@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects {{ name }}</title>
+    <title>Projects - {{ name }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=9">
 </head>
 <body>
     <header class="site-header">
@@ -23,25 +23,24 @@
     </header>
 
     <main>
-        <section class="experience-section" id="projects">
+        <section class="experience-section">
             <div class="container">
-                <p class="section-kicker">Showcase & Portfolio Works</p>
+                <span class="section-kicker">Showcase & Portfolio Works</span>
                 <h1>Projects</h1>
+
                 <div class="experience-grid">
                     {% for project in project_list %}
-                        <article class="experience-card">
-                            <span class="experience-category">
-                                {{ project.get_category_display }} &middot; {{ project.year }}
-                            </span>
+                    <div class="experience-card">
+                        <div>
+                            <span class="experience-category">{{ project.get_category_display }} &middot; {{ project.year }}</span>
                             <h2>{{ project.title }}</h2>
-                            <p class="experience-description">
-                                {{ project.description }}
-                            </p>
-                        </article>
+                            <p class="experience-description">{{ project.description }}</p>
+                        </div>
+                    </div>
                     {% empty %}
-                        <p class="empty-state">
-                            Belum ada proyek yang ditambahkan.
-                        </p>
+                    <div class="empty-state">
+                        <p>Belum ada proyek yang ditambahkan.</p>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
