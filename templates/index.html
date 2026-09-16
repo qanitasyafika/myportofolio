@@ -1,63 +1,40 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }} - Profile</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
-</head>
-<body>
-    <header class="site-header">
-        <div class="container header-container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <nav class="nav-links">
-                <a href="{% url 'main:show_main' %}" class="nav-item">Profile</a>
-                <a href="{% url 'main:show_experience' %}" class="nav-item">Experience</a>
-                <a href="{% url 'main:show_projects' %}" class="nav-item">Projects</a>
-            </nav>
-        </div>              
-    </header>
 
-    <main>
-        <section class="section" id="profile">
-            <div class="container hero-grid">
-                <div class="hero-text">
-                    <span class="badge">Sistem Informasi &middot; Universitas Indonesia</span>
-                    <h1>{{ name }}</h1>
-                    <p class="bio">{{ bio }}</p>
-                    <div class="meta-info">
-                        <div>
-                            <span class="meta-label">NPM</span>
-                            <span class="meta-val">{{ npm }}</span>
-                        </div>
-                        <div>
-                            <span class="meta-label">Program</span>
-                            <span class="meta-val">{{ study_program }}</span>
-                        </div>
+{% block meta %}
+<title>{{ name }} - Profile</title>
+{% endblock meta %}
+
+{% block content %}
+<main>
+    <section class="section" id="profile">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <span class="badge">Sistem Informasi &middot; Universitas Indonesia</span>
+                <h1>{{ name }}</h1>
+                <p class="bio">{{ bio }}</p>
+                <div class="meta-info">
+                    <div>
+                        <span class="meta-label">NPM</span>
+                        <span class="meta-val">{{ npm }}</span>
                     </div>
-
-                    <div class="social-btn-group">
-                        <a href="https://github.com/qanitasyafika" class="btn btn-navy-outline" target="_blank">GitHub</a>
-                        <a href="https://www.linkedin.com/in/qanita-syafika" class="btn btn-navy-outline" target="_blank">LinkedIn</a>
-                        <a href="mailto:qanitasyafika234@gmail.com" class="btn btn-navy-outline">Email</a>
+                    <div>
+                        <span class="meta-label">Program</span>
+                        <span class="meta-val">{{ study_program }}</span>
                     </div>
                 </div>
 
-                <div class="hero-image-wrapper">
-                    <img src="{% static 'img/qanita.png' %}" alt="Photo of {{ name }}" class="profile-img">
+                <div class="social-btn-group">
+                    <a href="https://github.com/qanitasyafika" class="btn btn-navy-outline" target="_blank">GitHub</a>
+                    <a href="https://www.linkedin.com/in/qanita-syafika" class="btn btn-navy-outline" target="_blank">LinkedIn</a>
+                    <a href="mailto:qanitasyafika234@gmail.com" class="btn btn-navy-outline">Email</a>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+            <div class="hero-image-wrapper">
+                <img src="{% static 'img/qanita.png' %}" alt="Photo of {{ name }}" class="profile-img">
+            </div>
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+</main>
+{% endblock content %}
