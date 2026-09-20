@@ -49,7 +49,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'myportofolio.urls'
+# DIUBAH MENJADI portofolio AGAR SESUAI DENGAN FOLDERMU
+ROOT_URLCONF = 'portofolio.urls'
 
 TEMPLATES = [
     {
@@ -67,8 +68,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myportofolio.wsgi.application'
-
+# DIUBAH MENJADI portofolio AGAR SESUAI DENGAN FOLDERMU
+WSGI_APPLICATION = 'portofolio.wsgi.application'
 
 # Database configuration
 DATABASES = {
@@ -77,7 +78,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -95,13 +95,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
