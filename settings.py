@@ -16,6 +16,13 @@ ALLOWED_HOSTS = [
     "qanita-syafika-myportofolio.pws.cs.ui.ac.id",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://qanita-syafika-myportofolio.pws.cs.ui.ac.id",
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://*.pws.cs.ui.ac.id",
+]
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
