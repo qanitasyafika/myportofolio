@@ -1,5 +1,5 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput
-from main.models import Project
+from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, CheckboxInput
+from main.models import Project, Experience
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -18,4 +18,23 @@ class ProjectForm(ModelForm):
             "tech_stack": TextInput(attrs={"placeholder": "Django, Python, HTML, CSS"}),
             "project_url": URLInput(attrs={"placeholder": "https://github.com/..."}),
             "project_image_url": URLInput(attrs={"placeholder": "https://drive.google.com/..."}),
+        }
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ["title", "organization", "description", "category", "is_ongoing"]
+        labels = {
+            "title": "Posisi / Peran",
+            "organization": "Nama Organisasi / Instansi",
+            "description": "Deskripsi Pengalaman",
+            "category": "Kategori",
+            "is_ongoing": "Masih Berlangsung",
+        }
+        widgets = {
+            "title": TextInput(attrs={"placeholder": "Public Relations Division", "maxlength": 255}),
+            "organization": TextInput(attrs={"placeholder": "Forum OSIS Sumatera Selatan", "maxlength": 255}),
+            "description": Textarea(attrs={"placeholder": "Jelaskan peran dan tanggung jawabmu...", "rows": 3}),
+            "category": Select(),
+            "is_ongoing": CheckboxInput(),
         }

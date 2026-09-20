@@ -10,7 +10,14 @@
     <section class="experience-section">
         <div class="container">
             <span class="section-kicker">Perjalanan Saya Sejauh Ini</span>
-            <h1>Experience</h1>
+            
+            <!-- UBAH BAGIAN HEADER INI -->
+            <div class="project-header">
+                <h1>Experience</h1>
+                <a href="{% url 'main:create_experience' %}" class="button project-add-button">
+                    <span aria-hidden="true">+</span> Tambah Pengalaman
+                </a>
+            </div>
 
             <div class="experience-grid">
                 {% for exp in experience_list %}
@@ -20,13 +27,23 @@
                         <h2>{{ exp.title }}</h2>
                         <p class="experience-description">{{ exp.description }}</p>
                     </div>
-                    <p class="experience-status">
-                        {% if exp.is_ongoing %}
-                            Sedang berlangsung
-                        {% else %}
-                            Selesai
-                        {% endif %}
-                    </p>
+                    <div>
+                        <p class="experience-status">
+                            {% if exp.is_ongoing %}
+                                Sedang berlangsung
+                            {% else %}
+                                Selesai
+                            {% endif %}
+                        </p>
+                        <!-- Aksi Edit & Hapus -->
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                            <a href="{% url 'main:update_experience' exp.id %}" class="button">Edit</a>
+                            <form action="{% url 'main:delete_experience' exp.id %}" method="post" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengalaman ini?');">
+                                {% csrf_token %}
+                                <button type="submit" class="button" style="background-color: #b42318; border-color: #b42318; color: white;">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 {% empty %}
                 <div class="empty-state">

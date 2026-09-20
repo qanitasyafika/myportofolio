@@ -8,14 +8,12 @@ class Experience(models.Model):
         ('pekerjaan', 'Pekerjaan'),
     ]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField()
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='organisasi')
-    ended_at = models.DateTimeField(null=True, blank=True)
-
-    @property
-    def is_ongoing(self):
-        return self.ended_at is None
+    is_ongoing = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
