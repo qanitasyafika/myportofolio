@@ -32,9 +32,9 @@ class ExperienceForm(ModelForm):
             "is_ongoing": "Masih Berlangsung",
         }
         widgets = {
-            "title": TextInput(attrs={"placeholder": "Public Relations Division", "maxlength": 255}),
-            "organization": TextInput(attrs={"placeholder": "Forum OSIS Sumatera Selatan", "maxlength": 255}),
-            "description": Textarea(attrs={"placeholder": "Jelaskan peran dan tanggung jawabmu...", "rows": 3}),
+            "title": TextInput(attrs={"placeholder": "Posisi", "maxlength": 255}),
+            "organization": TextInput(attrs={"placeholder": "Nama Organisasi/Instansi", "maxlength": 255}),
+            "description": Textarea(attrs={"placeholder": "Jelaskan peran dan tanggung jawab...", "rows": 3}),
             "category": Select(),
             "is_ongoing": CheckboxInput(),
         }
