@@ -69,6 +69,10 @@ def logout_user(request):
 # project views
 @login_required(login_url="/login/")
 def create_project(request):
+    # Cek apakah akun yang login adalah superuser; jika bukan, tolak dengan error 403
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     form = ProjectForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -109,6 +113,10 @@ def show_projects(request):
 
 @login_required(login_url="/login/")
 def delete_project(request, project_id):
+    # Cek apakah akun yang login adalah superuser; jika bukan, tolak dengan error 403
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     project = get_object_or_404(Project, pk=project_id)
     if request.method == "POST":
         project.delete()
