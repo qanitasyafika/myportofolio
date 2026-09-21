@@ -11,7 +11,6 @@
       <p class="section-kicker">Karya yang saya bangun</p>
       <div class="project-header">
         <h1>Projects</h1>
-        {% comment %} Langkah 3: Hanya tampilkan tombol Tambah jika pengguna adalah Superuser {% endcomment %}
         {% if user.is_superuser %}
         <a href="{% url 'main:create_project' %}" class="button project-add-button">
           <span aria-hidden="true">+</span> Tambah Proyek
@@ -43,7 +42,9 @@
               {% if project.project_url %}
               <a href="{{ project.project_url }}" class="button">Lihat Project</a>
               {% endif %}
-              {% comment %} Langkah 3: Hanya tampilkan modal Hapus jika pengguna adalah Superuser {% endcomment %}
+
+              {% include "project_star.html" with project=project %}
+
               {% if user.is_superuser %}
               {% include "components/project_delete_modal.html" with project=project %}
               {% endif %}

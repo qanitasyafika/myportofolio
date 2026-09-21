@@ -190,3 +190,22 @@ def delete_experience(request, experience_id):
         messages.success(request, "Pengalaman berhasil dihapus!")
         return redirect("main:show_experience")
     return redirect("main:show_experience")
+
+@login_required(login_url="/login/")
+def toggle_star_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if project.starred_by.filter(id=request.user.id).exists():
+        project.starred_by.remove(request.user)
+    else:
+        project.starred_by.add(request.user)
+    return redirect("main:show_projects")
+
+@login_required(login_url="/login/")
+def toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if request.method == "POST":
+        if request.user in project.starred_by.all():
+            project.starred_by.remove(request.user)
+        else:
+            project.starred_by.add(request.user)
+    return redirect("main:show_projects")
