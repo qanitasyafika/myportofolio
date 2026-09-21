@@ -504,4 +504,175 @@ main {
     text-align: center;
   }
   }
+
+  .auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1.5rem;
+    min-height: calc(100vh - 160px);
+}
+
+.auth-card {
+    background-color: var(--bg-maroon-dark);
+    border: 1px solid var(--border-maroon);
+    border-top: 4px solid var(--navy-light);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0.5rem 0 0.25rem 0;
+}
+
+.auth-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Form Fields */
+.auth-form .form-group {
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form .form-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 0.4rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--navy-dark);
+    border: 1px solid var(--border-maroon);
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    background-color: #0c1322;
+}
+
+/* Styling Petunjuk Password (Help Text Info Box) */
+.form-help {
+    background-color: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-navy);
+    border-left: 4px solid var(--navy-light);
+    border-radius: 6px;
+    padding: 0.75rem 0.9rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.form-help .help-title {
+    display: block;
+    font-weight: 700;
+    color: var(--navy-light);
+    margin-bottom: 0.3rem;
+}
+
+.form-help ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.form-help li {
+    margin-bottom: 0.2rem;
+    line-height: 1.35;
+}
+
+.form-help li:last-child {
+    margin-bottom: 0;
+}
+
+/* Error & Alert Messages */
+.form-error {
+    color: #f87171;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 0.35rem;
+}
+
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
+.alert-error {
+    background-color: rgba(180, 35, 24, 0.25);
+    border: 1px solid #b42318;
+    color: #fca5a5;
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.25);
+    border: 1px solid #10b981;
+    color: #6ee7b7;
+}
+
+/* Submit Button & Footer */
+.btn-navy-submit {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--navy-primary);
+    color: #ffffff;
+    border: 1px solid var(--navy-light);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.btn-navy-submit:hover {
+    background-color: var(--navy-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.75rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--navy-light);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
 }
