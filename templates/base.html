@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=10">
+    {% block meta %} {% endblock meta %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+            <nav class="nav-links">
+                <a href="{% url 'main:show_main' %}" class="nav-item">Profile</a>
+                <a href="{% url 'main:show_experience' %}" class="nav-item">Experience</a>
+                <a href="{% url 'main:show_projects' %}" class="nav-item">Projects</a>
+                
+                {% if user.is_authenticated %}
+                    <span class="nav-item nav-user">{{ user.username }}</span>
+                    <a href="{% url 'main:logout' %}" class="nav-item">Logout</a>
+                {% else %}
+                    <a href="{% url 'main:login' %}" class="nav-item">Login</a>
+                    <a href="{% url 'main:register' %}" class="nav-item">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    {% block content %} {% endblock content %}
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+        </div>
+    </footer>
+</body>
+</html>
