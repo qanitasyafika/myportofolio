@@ -4,6 +4,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core import serializers
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
 from main.forms import ExperienceForm, ProjectForm
@@ -65,6 +67,7 @@ def logout_user(request):
 
 
 # project views
+@login_required(login_url="/login/")
 def create_project(request):
     form = ProjectForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -104,7 +107,7 @@ def show_projects(request):
     }
     return render(request, "projects.html", context)
 
-
+@login_required(login_url="/login/")
 def delete_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if request.method == "POST":
