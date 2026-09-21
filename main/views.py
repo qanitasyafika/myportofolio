@@ -2,6 +2,10 @@ from django.contrib import messages
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.shortcuts import redirect, render
 
 from main.forms import ExperienceForm, ProjectForm
 from main.models import Experience, Project
@@ -131,3 +135,14 @@ def delete_experience(request, experience_id):
         messages.success(request, "Pengalaman berhasil dihapus!")
         return redirect("main:show_experience")
     return redirect("main:show_experience")
+
+def login_user(request):
+    form = AuthenticationForm(request, data=request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        login(request, form.get_user())
+        return redirect("main:show_main")
+    context = {
+        "name": "Qanita Syafika",
+        "form": form,
+    }
+    return render(request, "login.html", context)
