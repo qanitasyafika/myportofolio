@@ -91,7 +91,10 @@ def get_projects_json(request):
     projects = Project.objects.all()
     if title_query:
         projects = projects.filter(title__icontains=title_query)
-    projects_json = serializers.serialize("json", projects)
+    # Langkah 6: Gunakan use_natural_foreign_keys=True agar menampilkan username di JSON
+    projects_json = serializers.serialize(
+        "json", projects, use_natural_foreign_keys=True
+    )
     return HttpResponse(projects_json, content_type="application/json")
 
 
@@ -191,14 +194,6 @@ def delete_experience(request, experience_id):
         return redirect("main:show_experience")
     return redirect("main:show_experience")
 
-@login_required(login_url="/login/")
-def toggle_star_project(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-    if project.starred_by.filter(id=request.user.id).exists():
-        project.starred_by.remove(request.user)
-    else:
-        project.starred_by.add(request.user)
-    return redirect("main:show_projects")
 
 @login_required(login_url="/login/")
 def toggle_star(request, project_id):
