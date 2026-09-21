@@ -1,3 +1,4 @@
+import datetime  
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -10,12 +11,16 @@ from main.models import Experience, Project
 
 
 def show_main(request):
+    # Membaca cookie last_login dari request
+    last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
+    
     context = {
         'name': 'Qanita Syafika',
         'npm': '2506551996',
         'class': 'PBB C',
         'bio': 'Information Systems student at Universitas Indonesia passionate about leadership, public speaking, and event management. Experienced in leading teams and executing impactful business and technology initiatives.',
         'study_program': 'S1 Sistem Informasi',
+        'last_login': last_login,  
     }
     return render(request, "index.html", context)
 
@@ -37,8 +42,14 @@ def register(request):
 def login_user(request):
     form = AuthenticationForm(request, data=request.POST or None)
     if request.method == "POST" and form.is_valid():
-        login(request, form.get_user())
-        return redirect("main:show_main")
+        user = form.get_user()
+        login(request, user)
+        
+        # --- Langkah 2: Buat cookie last_login saat login berhasil ---
+        response = redirect("main:show_main")
+        response.set_cookie('last_login', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return response
+
     context = {
         "name": "Qanita Syafika",
         "form": form,
@@ -48,7 +59,9 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect("main:show_main")
+    response = redirect("main:show_main")
+    response.delete_cookie('last_login')  
+    return response
 
 
 # project views
