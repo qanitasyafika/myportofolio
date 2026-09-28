@@ -12,6 +12,7 @@ from main.views import (
     create_experience,
     update_experience,
     delete_experience,
+    toggle_star_experience,
 )
 
 app_name = 'main'
@@ -31,4 +32,5 @@ urlpatterns = [
     path('experience/add/', create_experience, name='create_experience'),
     path('experience/edit/<uuid:experience_id>/', update_experience, name='update_experience'),
     path('experience/delete/<uuid:experience_id>/', delete_experience, name='delete_experience'),
+    path('experience/<uuid:experience_id>/star/', toggle_star_experience, name='toggle_star_experience'),
 ]

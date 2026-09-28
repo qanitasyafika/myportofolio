@@ -1,66 +1,63 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block meta %}
-<title>Experience - {{ name }}</title>
+<title>Experience {{ name }}</title>
 {% endblock meta %}
 
 {% block content %}
 <main>
-  <section class="experience-section">
+  <section class="experience-section" id="experience">
     <div class="container">
-      <p class="section-kicker">Perjalanan Saya Sejauh Ini</p>
-      
+      <p class="section-kicker">Perjalanan Karir Saya</p>
       <div class="project-header">
         <h1>Experience</h1>
+        {% if user.is_superuser %}
         <a href="{% url 'main:create_experience' %}" class="button project-add-button">
           <span aria-hidden="true">+</span> Tambah Pengalaman
         </a>
+        {% endif %}
       </div>
 
       <form method="get" action="{% url 'main:show_experience' %}" class="project-search">
         <input type="search" 
                name="title" 
                value="{{ title_query }}" 
-               placeholder="Cari berdasarkan nama pengalaman" 
+               placeholder="Cari berdasarkan posisi" 
                class="project-search_input" 
-               aria-label="Cari berdasarkan nama pengalaman">
+               aria-label="Cari berdasarkan posisi">
         <button type="submit" class="button">Cari</button>
       </form>
 
       <div class="experience-grid">
         {% for exp in experience_list %}
         <article class="experience-card">
-          <div>
-            <span class="experience-category">{{ exp.get_category_display }}</span>
-            <h2>{{ exp.title }}</h2>
-            {% if exp.organization %}
-            <p class="experience-organization">{{ exp.organization }}</p>
-            {% endif %}
-            <p class="experience-description">{{ exp.description }}</p>
-          </div>
-          <div>
-            <p class="experience-status">
-              {% if exp.is_ongoing %}
-                Sedang berlangsung
-              {% else %}
-                Selesai
+          <h2>{{ exp.title }}</h2>
+          <span class="experience-category">{{ exp.category }}</span>
+          <p class="experience-description">{{ exp.description }}</p>
+          {% if exp.start_date %}
+          <p class="experience-date">{{ exp.start_date }} - {{ exp.end_date|default:"Present" }}</p>
+          {% endif %}
+          
+          <div class="project-card-actions" style="margin-top: 1rem;">
+            <div class="project-actions" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+              {% include "components/experience_star.html" with experience=exp %}
+
+              {% if user.is_superuser or is_editor %}
+              <a href="{% url 'main:update_experience' exp.id %}" class="button button-secondary">Edit</a>
               {% endif %}
-            </p>
-            <div class="project-card-actions">
-              <div class="project-actions">
-                <a href="{% url 'main:update_experience' exp.id %}" class="button">Edit</a>
-                <form action="{% url 'main:delete_experience' exp.id %}" method="post" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengalaman ini?');">
-                  {% csrf_token %}
-                  <button type="submit" class="button">Hapus</button>
-                </form>
-              </div>
+
+              {% if user.is_superuser %}
+              <form action="{% url 'main:delete_experience' exp.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button button-danger" onclick="return confirm('Yakin ingin menghapus pengalaman ini?');">Hapus</button>
+              </form>
+              {% endif %}
             </div>
           </div>
         </article>
         {% empty %}
           {% if title_query %}
-          <p class="empty-state">Tidak ada pengalaman dengan nama tersebut.</p>
+          <p class="empty-state">Tidak ada pengalaman dengan kata kunci tersebut.</p>
           {% else %}
           <p class="empty-state">Belum ada pengalaman yang ditambahkan.</p>
           {% endif %}

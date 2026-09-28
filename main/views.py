@@ -12,8 +12,12 @@ from main.forms import ExperienceForm, ProjectForm
 from main.models import Experience, Project
 
 
+# Helper function untuk memeriksa peran Editor
+def is_editor(user):
+    return user.is_authenticated and user.groups.filter(name='Editor').exists()
+
+
 def show_main(request):
-    # Membaca cookie last_login dari request
     last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
     
     context = {
@@ -27,7 +31,7 @@ def show_main(request):
     return render(request, "index.html", context)
 
 
-# auth views
+# --- Auth Views ---
 def register(request):
     form = UserCreationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -47,7 +51,6 @@ def login_user(request):
         user = form.get_user()
         login(request, user)
         
-        # --- Langkah 2: Buat cookie last_login saat login berhasil ---
         response = redirect("main:show_main")
         response.set_cookie('last_login', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         return response
@@ -66,10 +69,9 @@ def logout_user(request):
     return response
 
 
-# project views
+# --- Project Views ---
 @login_required(login_url="/login/")
 def create_project(request):
-    # Cek apakah akun yang login adalah superuser; jika bukan, tolak dengan error 403
     if not request.user.is_superuser:
         raise PermissionDenied
     
@@ -91,7 +93,6 @@ def get_projects_json(request):
     projects = Project.objects.all()
     if title_query:
         projects = projects.filter(title__icontains=title_query)
-    # Langkah 6: Gunakan use_natural_foreign_keys=True agar menampilkan username di JSON
     projects_json = serializers.serialize(
         "json", projects, use_natural_foreign_keys=True
     )
@@ -114,9 +115,9 @@ def show_projects(request):
     }
     return render(request, "projects.html", context)
 
+
 @login_required(login_url="/login/")
 def delete_project(request, project_id):
-    # Cek apakah akun yang login adalah superuser; jika bukan, tolak dengan error 403
     if not request.user.is_superuser:
         raise PermissionDenied
     
@@ -128,13 +129,26 @@ def delete_project(request, project_id):
     return redirect("main:show_projects")
 
 
-# experience views
+@login_required(login_url="/login/")
+def toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if request.method == "POST":
+        if request.user in project.starred_by.all():
+            project.starred_by.remove(request.user)
+        else:
+            project.starred_by.add(request.user)
+    return redirect("main:show_projects")
+
+
+# --- Experience Views ---
 def get_experiences_json(request):
     title_query = request.GET.get("title", "").strip()
     experiences = Experience.objects.all()
     if title_query:
         experiences = experiences.filter(title__icontains=title_query)
-    experiences_json = serializers.serialize("json", experiences)
+    experiences_json = serializers.serialize(
+        "json", experiences, use_natural_foreign_keys=True
+    )
     return HttpResponse(experiences_json, content_type="application/json")
 
 
@@ -151,11 +165,17 @@ def show_experience(request):
         'name': 'Qanita Syafika',
         'experience_list': experience_list,
         'title_query': title_query,
+        'is_editor': is_editor(request.user),
     }
     return render(request, "experience.html", context)
 
 
+# Hanya Superuser yang boleh membuat Experience baru
+@login_required(login_url="/login/")
 def create_experience(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     form = ExperienceForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -170,7 +190,12 @@ def create_experience(request):
     return render(request, "experience_form.html", context)
 
 
+# Superuser DAN Editor boleh mengedit Experience
+@login_required(login_url="/login/")
 def update_experience(request, experience_id):
+    if not (request.user.is_superuser or is_editor(request.user)):
+        raise PermissionDenied
+
     experience = get_object_or_404(Experience, pk=experience_id)
     form = ExperienceForm(request.POST or None, instance=experience)
     if request.method == "POST" and form.is_valid():
@@ -186,7 +211,12 @@ def update_experience(request, experience_id):
     return render(request, "experience_form.html", context)
 
 
+# Hanya Superuser yang boleh menghapus Experience
+@login_required(login_url="/login/")
 def delete_experience(request, experience_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.method == "POST":
         experience.delete()
@@ -195,12 +225,13 @@ def delete_experience(request, experience_id):
     return redirect("main:show_experience")
 
 
+# Pengguna terdaftar (User, Editor, Superuser) boleh memberi Star pada Experience
 @login_required(login_url="/login/")
-def toggle_star(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
+def toggle_star_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
     if request.method == "POST":
-        if request.user in project.starred_by.all():
-            project.starred_by.remove(request.user)
+        if request.user in experience.starred_by.all():
+            experience.starred_by.remove(request.user)
         else:
-            project.starred_by.add(request.user)
-    return redirect("main:show_projects")
+            experience.starred_by.add(request.user)
+    return redirect("main:show_experience")

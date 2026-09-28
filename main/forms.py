@@ -1,10 +1,10 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, CheckboxInput
+from django.forms import ModelForm, TextInput, Textarea, URLInput, DateInput
 from main.models import Project, Experience
 
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ["title", "description", "tech_stack", "project_url", "project_image_url"]
+        fields = ['title', 'tech_stack', 'description', 'project_url', 'project_image_url']
         labels = {
             "title": "Nama Proyek",
             "description": "Deskripsi Proyek",
@@ -23,18 +23,18 @@ class ProjectForm(ModelForm):
 class ExperienceForm(ModelForm):
     class Meta:
         model = Experience
-        fields = ["title", "organization", "description", "category", "is_ongoing"]
+        fields = ['title', 'category', 'description', 'start_date', 'end_date']
         labels = {
             "title": "Posisi / Peran",
-            "organization": "Nama Organisasi / Instansi",
-            "description": "Deskripsi Pengalaman",
             "category": "Kategori",
-            "is_ongoing": "Masih Berlangsung",
+            "description": "Deskripsi Pengalaman",
+            "start_date": "Tanggal Mulai",
+            "end_date": "Tanggal Selesai",
         }
         widgets = {
             "title": TextInput(attrs={"placeholder": "Posisi", "maxlength": 255}),
-            "organization": TextInput(attrs={"placeholder": "Nama Organisasi/Instansi", "maxlength": 255}),
+            "category": TextInput(attrs={"placeholder": "Organisasi / Kepanitiaan"}),
             "description": Textarea(attrs={"placeholder": "Jelaskan peran dan tanggung jawab...", "rows": 3}),
-            "category": Select(),
-            "is_ongoing": CheckboxInput(),
+            "start_date": DateInput(attrs={"type": "date"}),
+            "end_date": DateInput(attrs={"type": "date"}),
         }

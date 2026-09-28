@@ -32,3 +32,23 @@ JSON (JavaScript Object Notation) jauh lebih disukai karena formatnya jauh lebih
 3. Alur fungsi view mengembalikan JSON dan pentingnya serialization. Alurnya kira-kira seperti ini: pertama, saat endpoint dipanggil, fungsi view di Django akan mengambil data portofolio dari database. Hasil dari pengambilan data ini bentuknya masih berupa QuerySet (objek data kompleks khas Django/Python). Selanjutnya, objek tersebut dimasukkan ke dalam serializer untuk diterjemahkan menjadi format JSON, lalu dikembalikan ke klien (browser) sebagai HTTP response. Kita wajib melakukan serialization karena bahasa yang lewat di jaringan internet (HTTP) itu nggak ngerti apa itu objek Python atau QuerySet. Serialization berfungsi untuk mengubah objek kompleks bahasa pemrograman tersebut menjadi teks atau string terstruktur (seperti JSON), supaya datanya bisa dikirim lewat jaringan dan dipahami oleh aplikasi manapun yang menerimanya (misalnya dibaca oleh JavaScript di sisi frontend).
 
 Saya menggunakan gen AI GEMINI dan Claude saat terjadi error, 404 error not found, dan juga errror ketika mau menyimpan experiences baru, mengecek ulang code yang ada untuk memastikan tidak ada error lagi.
+
+## Tugas 4
+
+### Pembatasan Hak Akses dan Peran (Authorization)
+Portofolio ini mengimplementasikan Role-Based Access Control dengan 4 tingkat hak akses:
+1. **Pengunjung (Guest)**: Hanya dapat membaca data portofolio (`Projects` dan `Experience`). Tidak dapat melakukan Star, Create, Update, atau Delete. Akses ke aksi terbatas akan di-redirect ke halaman Login.
+2. **Pengguna Biasa (User)**: Dapat membaca data serta memberikan atau membatalkan Star pada proyek/pengalaman. Tidak memiliki akses untuk menambah, mengubah, atau menghapus data.
+3. **Editor (Django Group)**: Memiliki seluruh hak akses Pengguna Biasa ditambah kemampuan untuk memperbarui/mengubah data (`Update`). Tidak dapat membuat data baru atau menghapus data.
+4. **Pemilik Portofolio (Superuser)**: Memiliki hak akses penuh (Create, Read, Update, Delete, Star).
+
+
+### Keamanan API JSON
+Endpoint serializer menggunakan `use_natural_foreign_keys=True` sehingga data relasi `starred_by` mengembalikan nama pengguna (username) dan tidak membocorkan primary key / ID internal database.
+
+### AI Disclosure & Transparency Log
+- Alat AI yang Digunakan**: Google Gemini.
+- Strategi Prompting**: Memberikan konteks kebutuhan dan menjelaskan perlahan Tugas 4 berdasarkan kriteria penilaian, serta menyelesaikan eror migrasi database secara bertahap.
+- **Perbaikan & Evaluasi Manual**: 
+  - Penyesuaian nama field model `Experience` agar selaras dengan `ExperienceForm` untuk menghindari `FieldError`.
+  - Penambahan grup `Editor` secara manual menggunakan Django Shell untuk pengujian lingkungan lokal.

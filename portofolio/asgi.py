@@ -1,24 +1,33 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-pbp-myportofolio-key'
 
-# Quick-start development settings - unsuitable for production
-SECRET_KEY = 'django-insecure-s_er@fnx-y*rj#6lfqxu#syg=ux2sm$jq2irq-x)g*f4^oyz=0'
-
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "qanita-syafika-myportofolio.pws.cs.ui.ac.id", "*"]
+# KONFIGURASI HOST & PROXY UNTUK PWS
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "qanita-syafika-myportofolio.pws.cs.ui.ac.id",
+]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://qanita-syafika-myportofolio.pws.cs.ui.ac.id",
+    "https://qanita-syafika-myportofolio.pws.cs.ui.ac.id",
+]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'portofolio.urls'
+ROOT_URLCONF = 'myportofolio.urls'
 
 TEMPLATES = [
     {
@@ -58,8 +67,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'portofolio.wsgi.application'
+WSGI_APPLICATION = 'myportofolio.wsgi.application'
 
+
+# Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -67,8 +78,8 @@ DATABASES = {
     }
 }
 
-# Password validation
 
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -86,37 +97,17 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+WHITENOISE_USE_FINDERS = True
 
-
-# Email
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    }
-}
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost",
-    "http://127.0.0.1",
-    "http://qanita-syafika-myportofolio.pws.cs.ui.ac.id",
-    "https://qanita-syafika-myportofolio.pws.cs.ui.ac.id",
-]
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
