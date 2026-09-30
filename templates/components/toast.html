@@ -1,0 +1,11 @@
+{% load static %}
+<!-- Container utama toast dengan Popover API -->
+<div id="toast-component" class="toast-component toast-hidden" popover="manual">
+  <div class="toast-content">
+    <h3 id="toast-title" class="toast-title">Notifikasi</h3>
+    <p id="toast-message" class="toast-message">Pesan notifikasi.</p>
+  </div>
+</div>
+
+<!-- Mengimpor skrip logika toast -->
+<script src="{% static 'js/toast.js' %}"></script>

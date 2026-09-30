@@ -391,10 +391,6 @@ main {
   margin-top: auto;
 }
 
-.hide {
-  display: none !important;
-}
-
 .project-actions .experience-status {
   margin-top: 0;
 }
@@ -696,5 +692,136 @@ main {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.25);
   font-size: 0.8rem;
+}
+
+/* Utilitas Sembunyi Elemen */
+.hide {
+  display: none !important;
+}
+
+/* Styling Toast Notification */
+.toast-component {
+  position: fixed;
+  inset: auto 2rem 2rem auto;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--bg-maroon-dark);
+  border: 1px solid var(--border-maroon);
+  color: var(--text-light);
+  z-index: 1000;
+}
+
+.toast-component:popover-open {
+  display: flex;
+}
+
+.toast-hidden {
+  opacity: 0;
+  transform: translateY(150%);
+  pointer-events: none;
+}
+
+.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+  color: #ffffff;
+}
+
+.toast-message {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.toast-success { border-left: 4px solid #10b981; }
+.toast-error { border-left: 4px solid #f87171; }
+.toast-normal { border-left: 4px solid var(--navy-light); }
+
+/* Styling Popover Modal Form */
+.project-form-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  background: transparent;
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-form-modal:popover-open {
+  display: flex;
+}
+
+.project-form-modal_backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.7);
+  cursor: default;
+}
+
+.project-form-modal_content {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 540px);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 2rem;
+  background: var(--bg-maroon-dark);
+  border: 1px solid var(--border-maroon);
+  border-top: 4px solid var(--navy-light);
+  border-radius: var(--radius);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.6);
+}
+
+.project-form-modal_content h2 {
+  margin: 0 2.5rem 1.25rem 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.project-form-modal_close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.project-form-modal_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.hide {
+  display: none !important;
 }
 }
