@@ -1,5 +1,8 @@
 from django.forms import ModelForm, TextInput, Textarea, URLInput, DateInput
+from django.core.exceptions import ValidationError
+from django.utils.html import strip_tags
 from main.models import Project, Experience
+
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -20,6 +23,20 @@ class ProjectForm(ModelForm):
             "project_image_url": URLInput(attrs={"placeholder": "https://drive.google.com/..."}),
         }
 
+    # sanitasi input project dari tag html
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data.get("title", "")).strip()
+        if not title:
+            raise ValidationError("Nama proyek tidak boleh kosong atau hanya berisi tag HTML.")
+        return title
+
+    def clean_tech_stack(self):
+        return strip_tags(self.cleaned_data.get("tech_stack", "")).strip()
+
+    def clean_description(self):
+        return strip_tags(self.cleaned_data.get("description", "")).strip()
+
+
 class ExperienceForm(ModelForm):
     class Meta:
         model = Experience
@@ -38,3 +55,16 @@ class ExperienceForm(ModelForm):
             "start_date": DateInput(attrs={"type": "date"}),
             "end_date": DateInput(attrs={"type": "date"}),
         }
+
+    # sanitasi input experience untuk proteksi xss
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data.get("title", "")).strip()
+        if not title:
+            raise ValidationError("Posisi tidak boleh kosong atau hanya berisi tag HTML.")
+        return title
+
+    def clean_category(self):
+        return strip_tags(self.cleaned_data.get("category", "")).strip()
+
+    def clean_description(self):
+        return strip_tags(self.cleaned_data.get("description", "")).strip()

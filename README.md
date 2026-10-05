@@ -52,3 +52,16 @@ Endpoint serializer menggunakan `use_natural_foreign_keys=True` sehingga data re
 - **Perbaikan & Evaluasi Manual**: 
   - Penyesuaian nama field model `Experience` agar selaras dengan `ExperienceForm` untuk menghindari `FieldError`.
   - Penambahan grup `Editor` secara manual menggunakan Django Shell untuk pengujian lingkungan lokal.
+
+### Tugas 5
+
+1. Debouncing adalah teknik untuk menunda eksekusi suatu fungsi hingga pengguna berhenti melakukan interaksi selama jangka waktu tertentu. Pada fitur pencarian AJAX, teknik ini sangat penting karena mencegah aplikasi mengirimkan *request* ke server pada setiap ketukan tombol[cite: 3]. Tanpa debouncing, server akan dibebani oleh terlalu banyak permintaan dalam waktu singkat, pemakaian *bandwidth* menjadi boros, serta berisiko memicu masalah *race condition* di mana respons pencarian lama datang terlambat dan menimpa hasil pencarian terbaru.
+
+2. Penggunaan `await` pada `fetch()` berfungsi untuk menghentikan sementara eksekusi kode secara asinkron sampai proses pengambilan data dari server selesai dan mengembalikan objek `Response`[cite: 3]. Jika kita tidak menggunakan `await`, variabel tempat kita menyimpan hasil `fetch()` hanya akan berisi objek `Promise` yang masih berstatus *pending*, bukan data respons aslinya. Akibatnya, saat kita mencoba mengolah data tersebut (seperti memanggil method `.json()`), program akan mengalami *error* atau menghasilkan nilai `undefined`.
+
+3. Serangan XSS (Cross-Site Scripting) adalah jenis kerentanan keamanan di mana penyerang menyisipkan skrip berbahaya (seperti kode JavaScript) ke dalam input data, sehingga skrip tersebut dieksekusi oleh browser milik pengguna lain yang melihat halaman tersebut. Data yang ditampilkan lewat AJAX/JavaScript lebih rentan terhadap serangan ini karena penyisipan teks secara dinamis (misalnya menggunakan `innerHTML`) akan membuat browser menginterpretasikan dan menjalankan tag HTML atau skrip mentah yang ada di dalamnya[cite: 4]. Sementara itu, data yang ditampilkan langsung melalui template Django lebih aman karena Django memiliki fitur *auto-escaping* bawaan yang otomatis mengubah karakter khusus seperti `<` dan `>` menjadi bentuk teks biasa.
+
+### AI Disclosure 
+- Alat AI yang Digunakan**: Google Gemini.
+- Strategi Prompting**: Memberikan konteks kebutuhan dan menjelaskan perlahan Tugas 5 berdasarkan kriteria penilaian, serta menyelesaikan beberapa error yang terjadi di project, membangtu penyesuaian CSS Style sehingga tidak bertumpuk
+

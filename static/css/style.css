@@ -291,7 +291,7 @@ main {
     margin-top: auto;
 }
 
-/* Responsive */
+/* Responsive Tablet/Mobile */
 @media (max-width: 768px) {
     .hero-grid {
         grid-template-columns: 1fr;
@@ -307,8 +307,9 @@ main {
     .experience-grid {
         grid-template-columns: 1fr;
     }
+}
 
-    /* projects */
+/* Projects Section */
 .project-header {
   width: 100%;
   display: flex;
@@ -360,16 +361,16 @@ main {
   width: 100%;
   min-width: 0;
   padding: 0.7rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border-maroon);
   border-radius: var(--radius);
-  background: #fff;
-  color: var(--ink);
+  background: var(--bg-maroon-dark);
+  color: var(--text-light);
   font: inherit;
 }
 
 .project-search_input:focus {
-  outline: 2px solid var(--accent);
-  border-color: var(--accent);
+  outline: 2px solid var(--navy-light);
+  border-color: var(--navy-light);
 }
 
 .project-actions {
@@ -432,15 +433,14 @@ main {
   z-index: 1;
   width: min(100%, 480px);
   padding: 1.5rem;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--bg-maroon-dark);
+  border: 1px solid var(--border-maroon);
   border-radius: var(--radius);
   box-shadow: 0 1rem 3rem rgba(28, 25, 23, 0.22);
 }
 
 .project-delete-modal_content h2 {
   margin: 0 0 0.75rem;
-  font-family: "Space Grotesk", -apple-system, sans-serif;
   font-size: 1.5rem;
 }
 
@@ -466,6 +466,7 @@ main {
 
 .button-danger {
   background: #b42318;
+  color: #ffffff;
 }
 
 @media (max-width: 600px) {
@@ -499,9 +500,10 @@ main {
     width: 100%;
     text-align: center;
   }
-  }
+}
 
-  .auth-container {
+/* Authentication Pages */
+.auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -537,7 +539,6 @@ main {
     font-size: 0.9rem;
 }
 
-/* Form Fields */
 .auth-form .form-group {
     margin-bottom: 1.25rem;
     display: flex;
@@ -573,7 +574,6 @@ main {
     background-color: #0c1322;
 }
 
-/* Styling Petunjuk Password (Help Text Info Box) */
 .form-help {
     background-color: rgba(15, 23, 42, 0.8);
     border: 1px solid var(--border-navy);
@@ -606,7 +606,6 @@ main {
     margin-bottom: 0;
 }
 
-/* Error & Alert Messages */
 .form-error {
     color: #f87171;
     font-size: 0.8rem;
@@ -634,7 +633,6 @@ main {
     color: #6ee7b7;
 }
 
-/* Submit Button & Footer */
 .btn-navy-submit {
     width: 100%;
     padding: 0.8rem;
@@ -672,6 +670,7 @@ main {
     text-decoration: underline;
 }
 
+/* Star Buttons */
 .star-form {
   display: inline;
 }
@@ -680,11 +679,10 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: var(--ink);
 }
 
 .button-star.is-starred {
-  background: var(--accent);
+  background: var(--navy-light);
 }
 
 .star-count {
@@ -699,7 +697,7 @@ main {
   display: none !important;
 }
 
-/* Styling Toast Notification */
+/* Toast Notifications */
 .toast-component {
   position: fixed;
   inset: auto 2rem 2rem auto;
@@ -748,7 +746,7 @@ main {
 .toast-error { border-left: 4px solid #f87171; }
 .toast-normal { border-left: 4px solid var(--navy-light); }
 
-/* Styling Popover Modal Form */
+/* Modal Form Add Project / Experience */
 .project-form-modal {
   display: none;
   position: fixed;
@@ -819,9 +817,4 @@ main {
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 1.5rem;
-}
-
-.hide {
-  display: none !important;
-}
 }

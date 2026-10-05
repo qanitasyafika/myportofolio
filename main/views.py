@@ -13,7 +13,7 @@ from main.forms import ExperienceForm, ProjectForm
 from main.models import Experience, Project
 
 
-# Helper function untuk memeriksa peran Editor
+# helper buat cek apakah user punya peran editor
 def is_editor(user):
     return user.is_authenticated and user.groups.filter(name='Editor').exists()
 
@@ -89,7 +89,6 @@ def create_project(request):
     return render(request, "projects_form.html", context)
 
 
-# View AJAX untuk membuat proyek baru via modal Popover
 @require_POST
 @login_required(login_url="/login/")
 def create_project_ajax(request):
@@ -127,7 +126,7 @@ def show_projects(request):
     context = {
         "name": "Qanita Syafika",
         "title_query": title_query,
-        "form": ProjectForm(), # Instance form kosong untuk modal
+        "form": ProjectForm(),
     }
     return render(request, "projects.html", context)
 
@@ -157,36 +156,64 @@ def toggle_star(request, project_id):
 
 
 # --- Experience Views ---
+
+# endpoint json untuk ajax experience
 def get_experiences_json(request):
     title_query = request.GET.get("title", "").strip()
     experiences = Experience.objects.all()
     if title_query:
         experiences = experiences.filter(title__icontains=title_query)
-    experiences_json = serializers.serialize(
-        "json", experiences, use_natural_foreign_keys=True
-    )
-    return HttpResponse(experiences_json, content_type="application/json")
+    
+    # buat dictionary manual supaya bisa bawa status star
+    experience_list = []
+    for exp in experiences:
+        experience_list.append({
+            "id": exp.id,
+            "title": exp.title,
+            "category": exp.category,
+            "description": exp.description,
+            "start_date": exp.start_date.isoformat() if exp.start_date else None,
+            "end_date": exp.end_date.isoformat() if exp.end_date else None,
+            "stars_count": exp.starred_by.count(),
+            "is_starred": request.user in exp.starred_by.all() if request.user.is_authenticated else False,
+        })
+        
+    return JsonResponse(experience_list, safe=False)
 
 
 def show_experience(request):
-    json_response = get_experiences_json(request)
-    experiences = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    experience_list = [exp.object for exp in experiences]
     title_query = request.GET.get("title", "").strip()
 
     context = {
         'name': 'Qanita Syafika',
-        'experience_list': experience_list,
         'title_query': title_query,
         'is_editor': is_editor(request.user),
+        'form': ExperienceForm(),
     }
     return render(request, "experience.html", context)
 
 
-# Hanya Superuser yang boleh membuat Experience baru
+# view ajax untuk tambah experience via modal
+@require_POST
+@login_required(login_url="/login/")
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya superuser yang dapat menambahkan pengalaman."},
+            status=403,
+        )
+
+    form = ExperienceForm(request.POST)
+    if form.is_valid():
+        experience = form.save()
+        return JsonResponse(
+            {"message": "Pengalaman berhasil ditambahkan.", "pk": str(experience.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+
 @login_required(login_url="/login/")
 def create_experience(request):
     if not request.user.is_superuser:
@@ -206,7 +233,6 @@ def create_experience(request):
     return render(request, "experience_form.html", context)
 
 
-# Superuser DAN Editor boleh mengedit Experience
 @login_required(login_url="/login/")
 def update_experience(request, experience_id):
     if not (request.user.is_superuser or is_editor(request.user)):
@@ -227,7 +253,6 @@ def update_experience(request, experience_id):
     return render(request, "experience_form.html", context)
 
 
-# Hanya Superuser yang boleh menghapus Experience
 @login_required(login_url="/login/")
 def delete_experience(request, experience_id):
     if not request.user.is_superuser:
@@ -241,7 +266,6 @@ def delete_experience(request, experience_id):
     return redirect("main:show_experience")
 
 
-# Pengguna terdaftar (User, Editor, Superuser) boleh memberi Star pada Experience
 @login_required(login_url="/login/")
 def toggle_star_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)

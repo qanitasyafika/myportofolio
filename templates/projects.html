@@ -24,20 +24,20 @@
   </form>
 
   <!-- State Tampilan Data -->
-  <div id="loading" class="empty-state hide">
+  <div id="loading" class="empty-state" style="display: none;">
     <p>Memuat proyek...</p>
   </div>
 
-  <div id="error" class="empty-state hide">
+  <div id="error" class="empty-state" style="display: none;">
     <p>Gagal memuat data proyek. Silakan coba lagi.</p>
   </div>
 
-  <div id="empty" class="empty-state hide">
+  <div id="empty" class="empty-state" style="display: none;">
     <p>Belum ada proyek yang ditemukan.</p>
   </div>
 
   <!-- Container Grid Proyek -->
-  <div id="grid" class="experience-grid project-grid hide"></div>
+  <div id="grid" class="experience-grid project-grid" style="display: none;"></div>
 </main>
 
 {% if user.is_superuser %}
@@ -85,11 +85,12 @@
     return cookieValue;
   }
 
+  // Mengatur visibilitas antar elemen status (loading, error, empty, grid)
   function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
-    loadingState.classList.toggle('hide', !showLoading);
-    errorState.classList.toggle('hide', !showError);
-    emptyState.classList.toggle('hide', !showEmpty);
-    gridContainer.classList.toggle('hide', !showGrid);
+    if (loadingState) loadingState.style.display = showLoading ? 'block' : 'none';
+    if (errorState) errorState.style.display = showError ? 'block' : 'none';
+    if (emptyState) emptyState.style.display = showEmpty ? 'block' : 'none';
+    if (gridContainer) gridContainer.style.display = showGrid ? 'grid' : 'none';
   }
 
   function closeProjectModal() {
