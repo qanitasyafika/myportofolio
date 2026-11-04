@@ -44,23 +44,32 @@
   {% include "components/project_form_modal.html" %}
 {% endif %}
 
+{% csrf_token %}
 <script>
-  const BASE_PROJECTS_ENDPOINT = "{% url 'main:get_projects_json' %}";
-  const CREATE_PROJECT_ENDPOINT = "{% url 'main:create_project_ajax' %}";
+  const BASE_PROJECTS_ENDPOINT = "{% url 'api:project-list' %}";
+  const DETAIL_PROJECT_ENDPOINT = "{% url 'api:project-detail' '00000000-0000-0000-0000-000000000000' %}";
+  const STAR_PROJECT_ENDPOINT = "{% url 'api:project-star' '00000000-0000-0000-0000-000000000000' %}";
   const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
-  const SEARCH_DEBOUNCE_DELAY = 300;
-  
-  let projectsAbortController;
-  let searchDebounceTimer;
+  const IS_AUTHENTICATED = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
 
   const loadingState = document.getElementById('loading');
   const errorState = document.getElementById('error');
   const emptyState = document.getElementById('empty');
   const gridContainer = document.getElementById('grid');
+  const searchForm = document.getElementById('project-search-form');
   const searchInput = document.getElementById('search-input');
   const projectForm = document.getElementById('project-form');
 
-  // Mencegah Serangan XSS
+  let projectsAbortController;
+  let searchDebounceTimer;
+
+  function getCookie(name) {
+    const prefix = `${name}=`;
+    const cookie = document.cookie.split(';').map(v => v.trim())
+      .find(v => v.startsWith(prefix));
+    return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
+  }
+
   function escapeHtml(value) {
     return String(value ?? '')
       .replaceAll('&', '&amp;')
@@ -70,22 +79,10 @@
       .replaceAll("'", '&#39;');
   }
 
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
+  function projectEndpoint(pattern, id) {
+    return pattern.replace('00000000-0000-0000-0000-000000000000', id);
   }
 
-  // Mengatur visibilitas antar elemen status (loading, error, empty, grid)
   function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
     if (loadingState) loadingState.style.display = showLoading ? 'block' : 'none';
     if (errorState) errorState.style.display = showError ? 'block' : 'none';
@@ -93,14 +90,7 @@
     if (gridContainer) gridContainer.style.display = showGrid ? 'grid' : 'none';
   }
 
-  function closeProjectModal() {
-    const modal = document.getElementById("add-project-modal");
-    if (modal) modal.hidePopover();
-  }
-
-  function buildProjectCardElement(item) {
-    const project = item.fields || {};
-    const projectId = item.pk;
+  function buildProjectCardElement(project) {
     const articleElement = document.createElement('article');
     articleElement.className = 'experience-card';
 
@@ -112,17 +102,14 @@
       ? `<a href="${escapeHtml(project.project_url)}" class="btn btn-navy-outline" target="_blank" rel="noopener noreferrer">Lihat Project</a>`
       : '';
 
-    const deleteUrl = "{% url 'main:delete_project' '00000000-0000-0000-0000-000000000000' %}"
-      .replace('00000000-0000-0000-0000-000000000000', projectId);
-    
-    const starUrl = "{% url 'main:toggle_star' '00000000-0000-0000-0000-000000000000' %}"
-      .replace('00000000-0000-0000-0000-000000000000', projectId);
+    const starHtml = IS_AUTHENTICATED
+      ? `<button type="button" class="btn btn-navy-outline button-star${project.is_starred ? ' is-starred' : ''}" data-action="star" data-id="${escapeHtml(project.id)}" title="${escapeHtml(project.starred_by_names)}">
+          <span aria-hidden="true">★</span> ${project.is_starred ? 'Unstar' : 'Star'} (${project.star_count})
+         </button>`
+      : `<a href="{% url 'main:login' %}" class="btn btn-navy-outline">Login to star (${project.star_count})</a>`;
 
     const deleteHtml = IS_SUPERUSER
-      ? `<form method="post" action="${deleteUrl}" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-navy-outline button-danger" onclick="return confirm('Yakin ingin menghapus project ini?');">Hapus</button>
-         </form>`
+      ? `<button type="button" class="btn btn-navy-outline button-danger" data-action="delete" data-id="${escapeHtml(project.id)}">Hapus</button>`
       : '';
 
     articleElement.innerHTML = `
@@ -135,12 +122,7 @@
       <div class="project-card-actions">
         <div class="project-actions">
           ${urlHtml}
-          <form method="post" action="${starUrl}" class="star-form">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-navy-outline button-star">
-              <span aria-hidden="true">★</span> Star
-            </button>
-          </form>
+          ${starHtml}
           ${deleteHtml}
         </div>
       </div>
@@ -149,92 +131,130 @@
     return articleElement;
   }
 
-  async function fetchProjects(searchQuery = "") {
+  async function fetchProjects(searchQuery = '') {
     if (projectsAbortController) projectsAbortController.abort();
     projectsAbortController = new AbortController();
 
     try {
       displayPageSection({ showLoading: true });
-      const url = searchQuery 
-        ? `${BASE_PROJECTS_ENDPOINT}?title=${encodeURIComponent(searchQuery)}`
-        : BASE_PROJECTS_ENDPOINT;
+      const url = new URL(BASE_PROJECTS_ENDPOINT, window.location.origin);
+      if (searchQuery) url.searchParams.set('title', searchQuery);
 
       const response = await fetch(url, {
-        headers: { 'Accept': 'application/json' },
+        headers: { Accept: 'application/json' },
         signal: projectsAbortController.signal,
       });
 
-      if (!response.ok) throw new Error('Gagal mengambil data');
-      const projectData = await response.json();
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const projects = await response.json();
 
-      if (!Array.isArray(projectData) || projectData.length === 0) {
-        displayPageSection({ showEmpty: true });
-      } else {
-        gridContainer.innerHTML = '';
-        projectData.forEach(item => {
-          gridContainer.appendChild(buildProjectCardElement(item));
-        });
-        displayPageSection({ showGrid: true });
+      if (gridContainer) {
+        gridContainer.replaceChildren(...projects.map(buildProjectCardElement));
       }
+      displayPageSection({ showGrid: projects.length > 0, showEmpty: projects.length === 0 });
     } catch (error) {
       if (error.name === 'AbortError') return;
-      console.error('Error fetching projects:', error);
+      console.error('Fetch error:', error);
       displayPageSection({ showError: true });
     }
   }
 
-  function searchProjects() {
-    fetchProjects(searchInput.value.trim());
+  function apiErrorMessage(data, status) {
+    const messages = Object.values(data).flat().filter(value => typeof value === 'string');
+    return messages.join(' ') || `Request failed (HTTP ${status}).`;
   }
 
-  async function addProject(event) {
-    event.preventDefault();
-    const submitButton = projectForm.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
+  async function writeProject(url, method, payload) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: payload !== undefined ? JSON.stringify(payload) : undefined,
+    });
 
-    try {
-      const response = await fetch(CREATE_PROJECT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'X-CSRFToken': getCookie('csrftoken') },
-        body: new FormData(projectForm),
-      });
+    if (response.status === 204) return null;
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(apiErrorMessage(data, response.status));
+    return data;
+  }
 
-      const result = await response.json().catch(() => ({}));
+  if (projectForm) {
+    projectForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const submitButton = projectForm.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = true;
 
-      if (response.ok) {
+      try {
+        const fields = new FormData(projectForm);
+        const payload = Object.fromEntries(
+          ['title', 'description', 'tech_stack', 'project_url', 'project_image_url']
+            .map(name => [name, fields.get(name)])
+        );
+
+        await writeProject(BASE_PROJECTS_ENDPOINT, 'POST', payload);
         projectForm.reset();
-        closeProjectModal();
+        const modal = document.getElementById("add-project-modal");
+        if (modal && typeof modal.hidePopover === 'function') modal.hidePopover();
+
         if (typeof showToast === 'function') {
           showToast('Berhasil', 'Proyek baru berhasil ditambahkan!', 'success');
         }
-        fetchProjects(searchInput.value.trim());
-      } else {
-        const errorMessages = result.errors
-          ? Object.values(result.errors).flat().map(error => error.message)
-          : [result.message || `Terjadi kesalahan.`];
+        await fetchProjects(searchInput ? searchInput.value.trim() : '');
+      } catch (error) {
         if (typeof showToast === 'function') {
-          showToast('Gagal menambahkan proyek', errorMessages.join(' '), 'error');
+          showToast('Gagal menambahkan proyek', error.message, 'error');
         }
+      } finally {
+        if (submitButton) submitButton.disabled = false;
       }
-    } catch (error) {
-      console.error('Error adding project:', error);
-      if (typeof showToast === 'function') {
-        showToast('Gagal menambahkan proyek', 'Koneksi bermasalah. Coba lagi.', 'error');
-      }
-    } finally {
-      submitButton.disabled = false;
-    }
+    });
   }
 
-  searchInput.addEventListener("input", function() {
-    clearTimeout(searchDebounceTimer);
-    searchDebounceTimer = setTimeout(searchProjects, SEARCH_DEBOUNCE_DELAY);
-  });
+  if (gridContainer) {
+    gridContainer.addEventListener('click', async function(event) {
+      const button = event.target.closest('button[data-action]');
+      if (!button || button.disabled) return;
 
-  if (projectForm) {
-    projectForm.addEventListener('submit', addProject);
+      const action = button.dataset.action;
+      if (action === 'delete' && !window.confirm('Yakin ingin menghapus project ini?')) return;
+
+      button.disabled = true;
+      try {
+        const pattern = action === 'star' ? STAR_PROJECT_ENDPOINT : DETAIL_PROJECT_ENDPOINT;
+        await writeProject(projectEndpoint(pattern, button.dataset.id), action === 'star' ? 'POST' : 'DELETE');
+        
+        if (typeof showToast === 'function') {
+          showToast('Berhasil', action === 'star' ? 'Status star diperbarui.' : 'Proyek berhasil dihapus.', 'success');
+        }
+        await fetchProjects(searchInput ? searchInput.value.trim() : '');
+      } catch (error) {
+        if (typeof showToast === 'function') {
+          showToast('Gagal', error.message, 'error');
+        }
+      } finally {
+        button.disabled = false;
+      }
+    });
   }
 
-  fetchProjects(searchInput.value.trim());
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => fetchProjects(searchInput.value.trim()), 300);
+    });
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      clearTimeout(searchDebounceTimer);
+      fetchProjects(searchInput ? searchInput.value.trim() : '');
+    });
+  }
+
+  fetchProjects(searchInput ? searchInput.value.trim() : '');
 </script>
 {% endblock content %}

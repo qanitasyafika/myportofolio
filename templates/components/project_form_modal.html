@@ -1,26 +1,72 @@
-<!-- Modal Form Tambah Proyek via Popover API -->
-<div id="add-project-modal" popover style="padding: 0; border: none; border-radius: 12px; max-width: 520px; width: 90%; background: #ffffff; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
-  <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-    <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #111827;">Tambah Proyek Baru (AJAX)</h3>
-    <button type="button" onclick="document.getElementById('add-project-modal').hidePopover()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; line-height: 1;">&times;</button>
-  </div>
+<div id="add-project-modal" popover class="project-form-modal">
+  <button type="button" class="project-form-modal_backdrop" onclick="document.getElementById('add-project-modal').hidePopover()" aria-label="Tutup"></button>
   
-  <form id="project-form" style="padding: 1.5rem;">
-    {% csrf_token %}
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-      {% for field in form %}
-        <div class="form-group">
-          <label for="{{ field.id_for_label }}" style="display: block; font-weight: 700; margin-bottom: 0.35rem; color: #374151;">
-            {{ field.label }}
-          </label>
-          {{ field }}
-        </div>
-      {% endfor %}
-    </div>
+  <div class="project-form-modal_content">
+    <button type="button" class="project-form-modal_close" onclick="document.getElementById('add-project-modal').hidePopover()" aria-label="Tutup">&times;</button>
+    
+    <h2>Tambah Proyek Baru (AJAX)</h2>
 
-    <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
-      <button type="button" onclick="document.getElementById('add-project-modal').hidePopover()" class="btn btn-navy-outline">Batal</button>
-      <button type="submit" class="btn btn-primary">Simpan Proyek</button>
-    </div>
-  </form>
+    <form id="project-form" class="auth-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="id_title" class="form-label">Nama Proyek</label>
+        <input type="text" name="title" id="id_title" placeholder="Contoh: Portfolio Website" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_tech_stack" class="form-label">Teknologi yang Digunakan</label>
+        <input type="text" name="tech_stack" id="id_tech_stack" placeholder="Contoh: Django, Python, HTML, CSS" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_description" class="form-label">Deskripsi Proyek</label>
+        <textarea name="description" id="id_description" rows="3" placeholder="Ceritakan singkat tentang proyekmu..." required style="resize: vertical; min-height: 80px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="id_project_url" class="form-label">URL Proyek (Opsional)</label>
+        <input type="url" name="project_url" id="id_project_url" placeholder="https://github.com/username/project">
+      </div>
+
+      <div class="form-group">
+        <label for="id_project_image_url" class="form-label">URL Gambar Proyek (Opsional)</label>
+        <input type="url" name="project_image_url" id="id_project_image_url" placeholder="https://...">
+      </div>
+
+      <div class="project-form-modal_actions">
+        <button type="button" class="btn btn-navy-outline" onclick="document.getElementById('add-project-modal').hidePopover()">Batal</button>
+        <button type="submit" class="btn btn-navy-submit" style="width: auto; margin-top: 0;">Simpan Proyek</button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<style>
+  .auth-form input[type="url"],
+  .auth-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--navy-dark);
+    border: 1px solid var(--border-maroon);
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .auth-form input[type="url"]:focus,
+  .auth-form textarea:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    background-color: #0c1322;
+  }
+
+  .auth-form input[type="url"]::placeholder,
+  .auth-form textarea::placeholder {
+    color: #64748b;
+  }
+</style>
