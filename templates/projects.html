@@ -5,12 +5,13 @@
 <main class="container section">
   <div class="project-header">
     <h1>Daftar Proyek</h1>
-    {% if user.is_superuser %}
-      <button type="button" class="btn btn-navy-outline project-add-button" popovertarget="add-project-modal">
-        <span aria-hidden="true">+</span> Tambah Proyek (AJAX)
-      </button>
-    {% endif %}
-  </div>
+    
+    {% if user.is_authenticated %}
+    <button type="button" class="btn btn-navy-submit project-add-button" onclick="document.getElementById('add-project-modal').showPopover()">
+      <span>+</span> Tambah Proyek (AJAX)
+    </button>
+  {% endif %}
+</div>
 
   <!-- Form Pencarian (Debounced) -->
   <form id="project-search-form" class="project-search" onsubmit="return false;">
