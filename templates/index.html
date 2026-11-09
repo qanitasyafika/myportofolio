@@ -1,61 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qanita Syafika - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <header class="site-header">
-        <div class="container">
-            <a href="#profile" class="brand">Qanita Syafika</a>
-            <nav>
-                <a href="#profile">Profile</a>
-            </nav>
-        </div>
-    </header>
+{% extends "base.html" %}
+{% load static %}
 
-    <main>
-        <section class="hero" id="profile">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Sistem Informasi &middot; Universitas Indonesia</p>
-                    <h1>Qanita Syafika</h1>
-                </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/qanita.png" alt="Photo of Qanita Syafika">
-                </div>
-                <div class="hero-details">
-                    <p class="bio">A student at Information Systems, Faculty of Computer Science at University of Indonesia. Passionate about leadership, public speaking, and organizational activities with proven experience in managing teams and coordinating events. Strong interest in people development, business, and technology, with the ability to connect interpersonal skills and analytical thinking to achieve impactful results.</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>25065541996</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
-                        </div>
-                    </dl>
-                    <div class="social-links">
-                        <a href="https://github.com/qanitasyafika" class="social-link" target="_blank">GitHub</a>
-                        <a href="https://www.linkedin.com/in/qanita-syafika" class="social-link" target="_blank">LinkedIn</a>
-                        <a href="mailto:qanita.syafika@ui.ac.id" class="social-link">Email</a>
+{% block meta %}
+<title>{{ name }} - Profile</title>
+{% endblock meta %}
+
+{% block content %}
+<main>
+    <section class="section" id="profile">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <span class="badge">Sistem Informasi &middot; Universitas Indonesia</span>
+                <h1>{{ name }}</h1>
+                <p class="bio">{{ bio }}</p>
+                <div class="meta-info">
+                    <div>
+                        <span class="meta-label">NPM</span>
+                        <span class="meta-val">{{ npm }}</span>
+                    </div>
+                    <div>
+                        <span class="meta-label">Program</span>
+                        <span class="meta-val">{{ study_program }}</span>
+                    </div>
+                    <div>
+                        <span class="meta-label">Sesi Terakhir Login</span>
+                        <span class="meta-val">{{ last_login }}</span>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 Qanita Syafika. Fakultas Ilmu Komputer, Universitas Indonesia</p>
+                <div class="social-btn-group">
+                    <a href="https://github.com/qanitasyafika" class="btn btn-navy-outline" target="_blank">GitHub</a>
+                    <a href="https://www.linkedin.com/in/qanita-syafika" class="btn btn-navy-outline" target="_blank">LinkedIn</a>
+                    <a href="mailto:qanitasyafika234@gmail.com" class="btn btn-navy-outline">Email</a>
+                </div>
+            </div>
+
+            <div class="hero-image-wrapper">
+                <img src="{% static 'img/qanita.png' %}" alt="Photo of {{ name }}" class="profile-img">
+            </div>
         </div>
-    </footer>
-</body>
-</html>
+    </section>
+</main>
+{% endblock content %}

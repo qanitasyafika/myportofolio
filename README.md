@@ -4,5 +4,74 @@ NPM : Qanita Syafika
 
 Kelas : C
 
-Latihan branching PBP
+### Tugas 1
 
+1. Ya, saya menggunakanelemen semantik HTML5 dalam merancang struktur website, seperti <header>, <nav>, <main>, <section>, dan <footer>
+
+2. Tantangan utama yang saya temukan adalah mengatur layout yang di mode desktop tersusun berdampingan secara horizontal (seperti grid pada bagian Profile dan Cards) agar tidak terlihat sempit, bertumpuk saat dibuka di layar mobile. Dari itu syaa mengevaluasi dengan alur ketika beralih ke mobile, orientasi bacanya menjadi vertikal. Oleh karena itu, pada kode CSS, saya menambahkan Media Query (@media (max-width: 768px)) untuk mematahkan tata letak. Misalnya, .hero-grid yang awalnya dibagi dua kolom (1.4fr 1fr), saya ubah menjadi satu kolom (grid-template-columns: 1fr;) agar teks perkenalan dan foto menyesuaikan lebar layar penuh secara bergantian. Dan juga saya membuat header navigasi yang memanjang secara horizontal di desktop menjadi flex-direction: column dengan memberikan gap agar opsi menu bertumpuk rapi di tengah.
+
+3. Batasan yang saya rasakaan karena ini static web adalah pada informasi yang sifatnya hardcoded(ditulis di dalam file HTML). Jika kedepannya saya harus update portofolio ini, artinya saya harus membuka source code dan mengeditnya manual. Saya merasa hal ini kurang efisien.
+Fungsionalitas yang saya ingin tambahkan adalah melakukan Integrasi Database. dengan begini model database (contoh Django models) untuk menyimpan entri Experience, Awards, dan Projects. Dengan itu, konten bisa ditampilkan secara dinamis melalui mekanisme looping (seperti {% for project in projects %}) dan bisa di-update melalui halaman admin tanpa membuka dari awal kode HTML sehingga lebih efisien.
+
+### Tugas 2
+1. Alur dimulai ketika pengguna mengakses URL https://.../projects/ melalui browser. Permintaan ini pertama kali diterima oleh berkas portofolio/urls.py yang mengarahkannya ke routing aplikasi main/urls.py. Berkas main/urls.py kemudian mencocokkan path 'projects/' dan memanggil fungsi view show_projects. Di dalam main/views.py, fungsi view mengambil seluruh data proyek dari basis data memanfaatkan model Project.objects.all() di main/models.py. Data tersebut dimasukkan ke dalam dictionary context untuk merender berkas projects.html. Akhirnya, template menerima context, memproses perulangan Django Template Language (DTL), dan menghasilkan struktur HTML final yang dikirimkan kembali ke browser pengguna.
+
+2. Menyimpan data pada model jauh lebih baik dibandingkan menulisnya secara langsung (hard-coded) di template karena menerapkan prinsip Separation of Concerns (SoC), yaitu memisahkan tampilan antarmuka dari logika penyimpanan data. Hal ini membuat pengelolaan data menjadi dinamis dan terstruktur, sehingga pembaruan data dapat dilakukan dengan mudah melalui Django Admin atau API tanpa perlu menyunting kode sumber HTML. Selain itu, pendekatan ini meningkatkan skalabilitas aplikasi saat ingin menambahkan fitur baru seperti pencarian, penyaringan data, atau integrasi basis data di masa mendatang.
+
+3. Perbedaan utama antara makemigrations dan migrate terletak pada tahap pembuatan dan eksekusi skrip perubahan basis data. Perintah makemigrations bertugas mendeteksi perubahan struktur pada berkas models.py lalu membuat berkas instruksi migrasi baru di folder migrations/ tanpa mengubah isi basis data secara langsung. Sementara itu, perintah migrate bertugas mengeksekusi instruksi tersebut untuk mengaplikasikan perubahan struktur tabel secara nyata ke dalam basis data. Sebagai contoh, saat menambahkan kelas Project baru di models.py, perintah python manage.py makemigrations akan menghasilkan berkas migrasi 0002_project.py, kemudian perintah python manage.py migrate dijalankan untuk memunculkan tabel main_project di dalam database.
+
+Saya Menggunakan AI Gemini untuk membantu mendesain bagian grid desain untuk Projects dan juga Experience agar lebih menarik. Sisanya saya melihat beberpa tutor dari youtube mulai dari penggunaan kombinasi warna dan membuat desain lebih menarik.
+
+## Tugas 3
+1. Kenapa pakai ModelForm dan butuh {% csrf_token %}?
+Kita pakai ModelForm biar kerjanya lebih praktis dan nggak reinvent the wheel. Kalau bikin form HTML manual, kita harus ngetik tag <input> satu per satu, dan yang paling ribet, kita harus ngatur validasi datanya dari nol secara manual. Dengan ModelForm, Django bakal langsung nge-generate form yang otomatis sinkron dengan field yang ada di model database kita. Validasi (seperti ngecek apakah input kosong atau tipe datanya salah) juga udah diurusin secara otomatis sama Django.Terkait {% csrf_token %}, ini adalah fitur keamanan yang wajib ada buat nyegah serangan Cross-Site Request Forgery (CSRF). Token ini ibarat "segel" unik yang mastiin kalau data form yang di-submit itu beneran berasal dari website kita sendiri, bukan dikirim diem-diem oleh hacker atau script jahat dari website lain yang nebeng sesi login kita.
+
+2. Kenapa JSON lebih disukai dari XML?
+JSON (JavaScript Object Notation) jauh lebih disukai karena formatnya jauh lebih simpel, ringan, dan gampang dibaca (baik oleh manusia maupun sistem). XML itu sifatnya sangat verbose (terlalu banyak kata) karena pakai sistem tag pembuka dan penutup kayak HTML, yang bikin ukuran datanya jadi lebih bengkak dan lambat buat dikirim. Selain itu, karena JSON bentuk dasarnya sudah berupa objek key-value turunan dari JavaScript, proses parsing (membaca/mengolah data) di frontend modern jauh lebih cepet dan natural dibandingin XML yang butuh parser ekstra.
+
+3. Alur fungsi view mengembalikan JSON dan pentingnya serialization. Alurnya kira-kira seperti ini: pertama, saat endpoint dipanggil, fungsi view di Django akan mengambil data portofolio dari database. Hasil dari pengambilan data ini bentuknya masih berupa QuerySet (objek data kompleks khas Django/Python). Selanjutnya, objek tersebut dimasukkan ke dalam serializer untuk diterjemahkan menjadi format JSON, lalu dikembalikan ke klien (browser) sebagai HTTP response. Kita wajib melakukan serialization karena bahasa yang lewat di jaringan internet (HTTP) itu nggak ngerti apa itu objek Python atau QuerySet. Serialization berfungsi untuk mengubah objek kompleks bahasa pemrograman tersebut menjadi teks atau string terstruktur (seperti JSON), supaya datanya bisa dikirim lewat jaringan dan dipahami oleh aplikasi manapun yang menerimanya (misalnya dibaca oleh JavaScript di sisi frontend).
+
+Saya menggunakan gen AI GEMINI dan Claude saat terjadi error, 404 error not found, dan juga errror ketika mau menyimpan experiences baru, mengecek ulang code yang ada untuk memastikan tidak ada error lagi.
+
+## Tugas 4
+
+### Pembatasan Hak Akses dan Peran (Authorization)
+Portofolio ini mengimplementasikan Role-Based Access Control dengan 4 tingkat hak akses:
+1. **Pengunjung (Guest)**: Hanya dapat membaca data portofolio (`Projects` dan `Experience`). Tidak dapat melakukan Star, Create, Update, atau Delete. Akses ke aksi terbatas akan di-redirect ke halaman Login.
+2. **Pengguna Biasa (User)**: Dapat membaca data serta memberikan atau membatalkan Star pada proyek/pengalaman. Tidak memiliki akses untuk menambah, mengubah, atau menghapus data.
+3. **Editor (Django Group)**: Memiliki seluruh hak akses Pengguna Biasa ditambah kemampuan untuk memperbarui/mengubah data (`Update`). Tidak dapat membuat data baru atau menghapus data.
+4. **Pemilik Portofolio (Superuser)**: Memiliki hak akses penuh (Create, Read, Update, Delete, Star).
+
+
+### Keamanan API JSON
+Endpoint serializer menggunakan `use_natural_foreign_keys=True` sehingga data relasi `starred_by` mengembalikan nama pengguna (username) dan tidak membocorkan primary key / ID internal database.
+
+### AI Disclosure & Transparency Log
+- Alat AI yang Digunakan**: Google Gemini.
+- Strategi Prompting**: Memberikan konteks kebutuhan dan menjelaskan perlahan Tugas 4 berdasarkan kriteria penilaian, serta menyelesaikan eror migrasi database secara bertahap.
+- **Perbaikan & Evaluasi Manual**: 
+  - Penyesuaian nama field model `Experience` agar selaras dengan `ExperienceForm` untuk menghindari `FieldError`.
+  - Penambahan grup `Editor` secara manual menggunakan Django Shell untuk pengujian lingkungan lokal.
+
+### Tugas 5
+
+1. Debouncing adalah teknik untuk menunda eksekusi suatu fungsi hingga pengguna berhenti melakukan interaksi selama jangka waktu tertentu. Pada fitur pencarian AJAX, teknik ini sangat penting karena mencegah aplikasi mengirimkan *request* ke server pada setiap ketukan tombol[cite: 3]. Tanpa debouncing, server akan dibebani oleh terlalu banyak permintaan dalam waktu singkat, pemakaian *bandwidth* menjadi boros, serta berisiko memicu masalah *race condition* di mana respons pencarian lama datang terlambat dan menimpa hasil pencarian terbaru.
+
+2. Penggunaan `await` pada `fetch()` berfungsi untuk menghentikan sementara eksekusi kode secara asinkron sampai proses pengambilan data dari server selesai dan mengembalikan objek `Response`[cite: 3]. Jika kita tidak menggunakan `await`, variabel tempat kita menyimpan hasil `fetch()` hanya akan berisi objek `Promise` yang masih berstatus *pending*, bukan data respons aslinya. Akibatnya, saat kita mencoba mengolah data tersebut (seperti memanggil method `.json()`), program akan mengalami *error* atau menghasilkan nilai `undefined`.
+
+3. Serangan XSS (Cross-Site Scripting) adalah jenis kerentanan keamanan di mana penyerang menyisipkan skrip berbahaya (seperti kode JavaScript) ke dalam input data, sehingga skrip tersebut dieksekusi oleh browser milik pengguna lain yang melihat halaman tersebut. Data yang ditampilkan lewat AJAX/JavaScript lebih rentan terhadap serangan ini karena penyisipan teks secara dinamis (misalnya menggunakan `innerHTML`) akan membuat browser menginterpretasikan dan menjalankan tag HTML atau skrip mentah yang ada di dalamnya[cite: 4]. Sementara itu, data yang ditampilkan langsung melalui template Django lebih aman karena Django memiliki fitur *auto-escaping* bawaan yang otomatis mengubah karakter khusus seperti `<` dan `>` menjadi bentuk teks biasa.
+
+### AI Disclosure 
+- Alat AI yang Digunakan**: Google Gemini.
+- Strategi Prompting**: Memberikan konteks kebutuhan dan menjelaskan perlahan Tugas 5 berdasarkan kriteria penilaian, serta menyelesaikan beberapa error yang terjadi di project, membangtu penyesuaian CSS Style sehingga tidak bertumpuk
+
+
+## Tugas 6
+
+1. REST, PUT vs PATCH. REST (Representational State Transfer) adalah gaya arsitektur untuk API web yang memperlakukan data sebagai resource yang diidentifikasi lewat URL dan dimanipulasi lewat representasinya (misalnya JSON) memakai method HTTP standar. Ciri utamanya: client-server, stateless (tiap request membawa informasi yang cukup untuk diproses), cacheable, uniform interface, dan layered system. Mengembalikan JSON saja belum cukup karena JSON hanya format data, bukan desain API. API ini baru mencapai tingkat "pragmatis": otentikasinya memakai session cookie (tidak sepenuhnya stateless) dan belum menyertakan hypermedia links (HATEOAS). PUT mengganti seluruh resource sehingga semua field wajib dikirim; PATCH hanya mengubah field yang dikirim. Pada API ini, PUT {"title": "Incomplete"} ditolak 400 karena category dan description wajib, sedangkan PATCH {"title": "..."} hanya mengubah judul dan membiarkan field lain. PATCH cocok untuk modal edit (Editor memperbaiki satu typo), sedangkan PUT cocok ketika klien memang mengirim ulang seluruh data, misalnya sinkronisasi dari sumber lain.
+
+2. Peran serializer. Serializer menerjemahkan dua arah: objek model menjadi tipe data sederhana (JSON) saat response, dan JSON dari request menjadi data yang sudah divalidasi lalu disimpan ke model lewat save(). ExperienceSerializer mendefinisikan field secara eksplisit, melakukan strip_tags di validate_title, validate_category, dan validate_description, memeriksa urutan tanggal di validate(), serta menghitung star_count dan is_starred sebagai field read-only. Dibanding merakit dictionary dengan JsonResponse seperti get_experiences_json di Tutorial 05 / Tugas 5, serializer lebih baik karena: satu definisi dipakai untuk output dan input, sedangkan dulu serialisasi (dictionary manual, isoformat(), str(id)) dan validasi (ExperienceForm) terpisah dan bisa tidak sinkron dilain hal validasi dan sanitasi terpusat dan menghasilkan error per field dengan status 400 dan field hasil perhitungan dan id read-only sehingga tidak bisa dipalsukan oleh klien serta daftar fields yang eksplisit mencegah data sensitif (email, password hash) ikut bocor dan juga tipe seperti UUID dan tanggal dikonversi otomatis dan  mudah dites serta otomatis ikut tampil di Browsable API.
+
+3. Autentikasi vs otorisasi, dan alasan pemeriksaan di server. Autentikasi menjawab "kamu siapa?". Di DRF, SessionAuthentication membaca cookie sessionid lalu mengisi request.user. IsPortfolioOwnerOrEditorOrReadOnly mengizinkan baca untuk semua orang, PUT/PATCH untuk Editor dan superuser, serta POST/DELETE hanya untuk superuser; pelanggaran menghasilkan 403. Karena SessionAuthentication tidak mengirim header WWW-Authenticate, pengunjung yang belum login pun mendapat 403, bukan 401. Menyembunyikan tombol di template hanya mengatur tampilan, bukan akses. Siapa pun bisa mengirim request langsung lewat curl, Postman, atau konsol browser, bahkan mengubah variabel JavaScript seperti IS_SUPERUSER. Kalau server tidak memeriksa, request itu akan berhasil. Karena itu aturan hak akses harus ada di server, dan tombol yang disembunyikan hanyalah kenyamanan UI. Test test_editor_cannot_create_or_delete membuktikannya: Editor yang mengirim POST/DELETE langsung ke API ditolak 403 dan data di database tidak berubah.
+
+4. CSRF pada SessionAuthentication dan keterbatasan force_authenticate. Dengan SessionAuthentication, browser mengirim cookie sessionid secara otomatis ke domain kita, termasuk ketika request dipicu oleh halaman situs lain. Tanpa perlindungan, situs jahat bisa membuat browser korban yang sedang login mengirim DELETE atau POST ke API kita atas nama korban. Token CSRF (cookie csrftoken yang dikirim ulang lewat header X-CSRFToken) adalah nilai yang tidak bisa dibaca situs lain karena same-origin policy, sehingga membuktikan request berasal dari halaman kita. DRF memeriksanya untuk method yang mengubah data (POST, PUT, PATCH, DELETE) pada user yang terautentikasi lewat session; karena itu halaman Experience mengirim X-CSRFToken pada setiap request tulis, dan view halaman diberi @ensure_csrf_cookie supaya pengguna biasa dan Editor tetap menerima cookie-nya. force_authenticate melewati proses autentikasi sepenuhnya: tidak ada login, tidak ada session, dan pemeriksaan CSRF tidak pernah berjalan.

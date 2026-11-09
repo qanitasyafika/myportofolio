@@ -1,0 +1,72 @@
+<div id="add-project-modal" popover class="project-form-modal">
+  <button type="button" class="project-form-modal_backdrop" onclick="document.getElementById('add-project-modal').hidePopover()" aria-label="Tutup"></button>
+  
+  <div class="project-form-modal_content">
+    <button type="button" class="project-form-modal_close" onclick="document.getElementById('add-project-modal').hidePopover()" aria-label="Tutup">&times;</button>
+    
+    <h2>Tambah Proyek Baru (AJAX)</h2>
+
+    <form id="project-form" class="auth-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="id_title" class="form-label">Nama Proyek</label>
+        <input type="text" name="title" id="id_title" placeholder="Contoh: Portfolio Website" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_tech_stack" class="form-label">Teknologi yang Digunakan</label>
+        <input type="text" name="tech_stack" id="id_tech_stack" placeholder="Contoh: Django, Python, HTML, CSS" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_description" class="form-label">Deskripsi Proyek</label>
+        <textarea name="description" id="id_description" rows="3" placeholder="Ceritakan singkat tentang proyekmu..." required style="resize: vertical; min-height: 80px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="id_project_url" class="form-label">URL Proyek (Opsional)</label>
+        <input type="url" name="project_url" id="id_project_url" placeholder="https://github.com/username/project">
+      </div>
+
+      <div class="form-group">
+        <label for="id_project_image_url" class="form-label">URL Gambar Proyek (Opsional)</label>
+        <input type="url" name="project_image_url" id="id_project_image_url" placeholder="https://...">
+      </div>
+
+      <div class="project-form-modal_actions">
+        <button type="button" class="btn btn-navy-outline" onclick="document.getElementById('add-project-modal').hidePopover()">Batal</button>
+        <button type="submit" class="btn btn-navy-submit" style="width: auto; margin-top: 0;">Simpan Proyek</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .auth-form input[type="url"],
+  .auth-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--navy-dark);
+    border: 1px solid var(--border-maroon);
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .auth-form input[type="url"]:focus,
+  .auth-form textarea:focus {
+    outline: none;
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    background-color: #0c1322;
+  }
+
+  .auth-form input[type="url"]::placeholder,
+  .auth-form textarea::placeholder {
+    color: #64748b;
+  }
+</style>
