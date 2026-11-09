@@ -12,6 +12,8 @@ class IsPortfolioOwnerOrReadOnly(BasePermission):
 
 
 class IsPortfolioOwnerOrEditorOrReadOnly(BasePermission):
+    message = "Hanya pemilik portofolio dan Editor yang dapat mengubah data."
+
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
@@ -19,7 +21,9 @@ class IsPortfolioOwnerOrEditorOrReadOnly(BasePermission):
             return False
         if request.user.is_superuser:
             return True
-        return (
-            request.method in ("PUT", "PATCH")
-            and request.user.groups.filter(name="Editor").exists()
-        )
+        if request.user.groups.filter(name="Editor").exists():
+            if request.method in ("PUT", "PATCH"):
+                return True
+            # editor sudah login, jadi beri tahu alasan penolakannya lewat toast
+            self.message = "Editor hanya dapat mengubah data, tidak dapat menambah atau menghapusnya."
+        return False
