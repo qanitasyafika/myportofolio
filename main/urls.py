@@ -11,12 +11,6 @@ from main.views import (
     delete_project,
     toggle_star,
     show_experience,
-    get_experiences_json,
-    create_experience,
-    create_experience_ajax,
-    update_experience,
-    delete_experience,
-    toggle_star_experience,
 )
 
 app_name = 'main'
@@ -36,12 +30,5 @@ urlpatterns = [
     path('projects/delete/<uuid:project_id>/', delete_project, name='delete_project'),
     path('projects/star/<uuid:project_id>/', toggle_star, name='toggle_star'),
 
-    # experience
     path('experience/', show_experience, name='show_experience'),
-    path('experience/json/', get_experiences_json, name='get_experiences_json'),
-    path('experience/create/', create_experience, name='create_experience'),
-    path('experience/create-ajax/', create_experience_ajax, name='create_experience_ajax'),
-    path('experience/edit/<uuid:experience_id>/', update_experience, name='update_experience'),
-    path('experience/delete/<uuid:experience_id>/', delete_experience, name='delete_experience'),
-    path('experience/star/<uuid:experience_id>/', toggle_star_experience, name='toggle_star_experience'),
 ]
