@@ -83,3 +83,4 @@ Alat AI: Google Gemini
 Penggunaan: Membantu memahami alur tugas, mengajarkan langkah efektif dari mana harus memulai, refactoring antarmuka (HTML/CSS), dan asistensi debugging.
 
 Tanggung Jawab Pembuat: Seluruh keluaran AI telah diuji, disesuaikan dengan kebutuhan proyek, dan diverifikasi keamanannya secara manual.
+
